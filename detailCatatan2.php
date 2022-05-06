@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require_once("./db.php");
 $result = query("SELECT * FROM data_pencatatan");
 if (isset($_GET["id"])) {
@@ -21,7 +21,7 @@ $query = "SELECT * FROM akun_pemilik";
 $stmt = $conn->query($query);
 $hasil = $stmt->fetch_assoc();
 
-?>
+?>;
 
 
 <!DOCTYPE html>
@@ -35,9 +35,12 @@ $hasil = $stmt->fetch_assoc();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <style>
         * {
-            font-style: poppins, sans-serif;
             margin: 0;
             padding: 0;
+        }
+        body {
+            background-image: url(img/bgppl.jpeg);
+            background-size: cover;
         }
         nav {
             padding-top: 20px;
@@ -58,30 +61,49 @@ $hasil = $stmt->fetch_assoc();
         }
     </style>
 <body>
-    <div class="container mt-4">
-        <nav class="row ps-4">
-            <h3 class="col-2">SEEDS_UP</h3>
-            <ul class="col-5 d-flex justify-content-between">
+    <div class="container">
+    <nav class="row ps-4">
+            <div class="col-1">
+                <img src="img/logoppl-removebg-preview.png" style="position:absolute;top:4%;height: 4rem; width: 4.5rem;">
+            </div>
+            <ul class="col-7 d-flex justify-content-between">
                 <li><a href="tampilanOwner2.php"><h6>Dashboard</h6></a></li>
-                <li><a href="laporanPencatatan2.php"><h6>Laporan Pencatatan</h6></a></li>
                 <li><a href="infoCuaca2.php"><h6>Info Cuaca</h6></a></li>
-                <li><a href="pemasaran2.php"><h6>Pemasaran</h6></a></li>
+                <li><a href="laporanPencatatan2.php"><h6>Laporan Pencatatan</h6></a></li>
+                <li><a href="pemasaran2.php"><h6>Produk</h6></a></li>
+                <li><a href="riwayatTransaksi.php"><h6> Riwayat Transaksi</h6></a></li>
             </ul>
-            <h5 class="col-3 offset-2 pt-2 d-flex justify-content-end">Halo, <?=$hasil["username"]?></h5>
+            <h5 class="col-2 offset-2 pt-2 d-flex justify-content-end">
+                <a href="profilOwner.php" style="text-decoration: none;color: #34364a;">
+                <i class="bi bi-person"></i>
+                <?php echo "Halo, " . $_SESSION['username_owner'] ."!". ""; ?>
+                </a>
+            </h5>
         </nav>
         <div class="container-fluid justify-content-md-center mt-5">
             <h5 style="color: rgba(255, 117, 24, 1);">Ini catatanmu!</h5>
             <h2 class="mb-4" style="font-weight: bold;">Detail Catatan</h2>
-            <div class="judul mb-3">
-                <h4>Judul:</h4>
-                <?=$result["judul"]?>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="mb-3">
+                        <h4>Judul:</h4>
+                        <?=$result["judul"]?>
+                    </div>
+                    <h4>Kategori:</h4>
+                    <?=$result["kategori"]?>
+                </div>
+                <div class="col">
+                    <h4>Rincian:</h4>
+                    <p style="font-family: Arial, sans-serif; font-size:medium;">
+                        Pemasukkan: <?=$result["pemasukan"]?><br>
+                        Pengeluaran: <?=$result["pengeluaran"]?><br>
+                        <hr margin="0" padding="0">
+                        <b>Keuntungan: <?=$result["pemasukan"] - $result["pengeluaran"]?></b>
+                    </p>
+                </div>
             </div>
-            <div class="kategori mb-3">
-                <h4>Kategori:</h4>
-                <?=$result["kategori"]?>
-            </div>
-            <div class="isi mb-3">
-                <h4>Isi:</h4>
+            <div class="mb-3">
+                <h4>Deskripsi:</h4>
                 <?=$result["isi"]?>
             </div>
             <div class="d-flex justify-content-between mt-5">
