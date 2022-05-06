@@ -5,18 +5,20 @@ include 'db.php';
 error_reporting(0);
 
 session_start();
-
+if (isset($_SESSION['username_owner'])) {
+    header("Location: tampilanOwner2.php");
+}
 if (isset($_POST['submitOwner'])) {
     $email = $_POST['emailOwner'];
     $password = $_POST['passwordOwner'];
 
-    $sql = "SELECT * FROM akun_pemilik WHERE e_mail='$email' AND password='$password'";
+    $sql = "SELECT * FROM `akun_pemilik` WHERE e_mail='$email' AND password='$password'";
     $result = $conn->query($sql);
-    if ($result-> num_rows > 0) {
+    if ($result->num_rows > 0) {
         $row = mysqli_fetch_assoc($result);
-        var_dump($row);
-        $_SESSION['username'] = $row['username'];
+        $_SESSION['username_owner'] = $row['username'];
         header("Location: tampilanOwner2.php");
+    
     } else {
         echo "<script>alert('Email atau password Anda salah. Silahkan coba lagi!')</script>";
     }
@@ -47,21 +49,6 @@ if (isset($_POST['submitOwner'])) {
             top: 0px;
             background: rgba(255, 117, 24, 1);
         }
-        .group2 {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            left: 0;
-            top: 83.4%;
-            transform: rotate(-180deg);
-        }
-        .group1 {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            left: 37.2%;
-            top: 0px;
-        }
         .bgImg {
             position: absolute;
             width: 100%;
@@ -89,6 +76,9 @@ if (isset($_POST['submitOwner'])) {
             top: 30%;
             color: white;
         }
+        small {
+            font-size: smaller;
+        }
     </style>
 </head>
 <body>
@@ -99,11 +89,9 @@ if (isset($_POST['submitOwner'])) {
                 <h1 class="parLog">Satu klik dapat mengubah nasib</h1>
                 <img class="bgImg" src="img/pumpkin-background-1506954255YDp.jpg" alt="">
             </div>
-            <img class="group2" src="img/Group 2.png" alt="">
-            <img class="group1" src="img/Group 2.png" alt="">
         </div>
         <div class="container col row mt-5 mx-auto">
-            <div class="col-8 mx-auto mt-5">
+            <div class="col-6 mx-auto mt-5">
                 <form action="" method="POST">
                     <h3>Selamat Datang Admin</h3>
                     <div class="mb-3 mt-5">
@@ -117,7 +105,7 @@ if (isset($_POST['submitOwner'])) {
                     <div class="d-grid gap-2">
                         <button type="submit" name="submitOwner" class="btn btn-primary">Log In</button>
                     </div>
-                    <p class="login-register-text">Anda belum punya akun? <a href="register.php" >Register</a></p>
+                    <small class="fw-light"><p>Masuk sebagai <a href="index.php" >Customer</a></p></small>
                 </form>
             </div>
         </div>
