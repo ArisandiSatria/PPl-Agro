@@ -1,9 +1,15 @@
 <?php 
-
+session_start();
 require_once("./db.php");
 
 $query ="SELECT * FROM data_produk";
 $result = execute($query);
+
+$query ="SELECT * FROM data_produk";
+$image_query = mysqli_query($conn, $query);
+while ($hasil = mysqli_fetch_array($image_query)) {
+    $img = base64_decode($hasil["foto"]);
+}
 
 $query = "SELECT * FROM akun_pemilik";
 $stmt = $conn->query($query);
@@ -26,6 +32,10 @@ $hasil = $stmt->fetch_assoc();
             font-style: poppins, sans-serif;
             margin: 0;
             padding: 0;
+        }
+        body {
+            background-image: url(img/bgppl.jpeg);
+            background-size: cover;
         }
         nav {
             padding-top: 20px;
@@ -64,15 +74,23 @@ $hasil = $stmt->fetch_assoc();
     </style>
 <body>
     <div class="container mt-4">
-        <nav class="row ps-4">
-            <h3 class="col-2">SEEDS_UP</h3>
-            <ul class="col-5 d-flex justify-content-between">
+    <nav class="row ps-4">
+            <div class="col-1">
+                <img src="img/logoppl-removebg-preview.png" style="position:absolute;top:4%;height: 4rem; width: 4.5rem;">
+            </div>
+            <ul class="col-7 d-flex justify-content-between">
                 <li><a href="tampilanOwner2.php"><h6>Dashboard</h6></a></li>
-                <li><a href="laporanPencatatan2.php"><h6>Laporan Pencatatan</h6></a></li>
                 <li><a href="infoCuaca2.php"><h6>Info Cuaca</h6></a></li>
-                <li><a href="pemasaran2.php"><h6>Pemasaran</h6></a></li>
+                <li><a href="laporanPencatatan2.php"><h6>Laporan Pencatatan</h6></a></li>
+                <li><a href="pemasaran2.php"><h6>Produk</h6></a></li>
+                <li><a href="riwayatTransaksi.php"><h6> Riwayat Transaksi</h6></a></li>
             </ul>
-            <h5 class="col-3 offset-2 pt-2 d-flex justify-content-end">Halo, <?=$hasil["username"]?></h5>
+            <h5 class="col-2 offset-2 pt-2 d-flex justify-content-end">
+                <a href="profilOwner.php" style="text-decoration: none;color: #34364a;">
+                <i class="bi bi-person"></i>
+                <?php echo "Halo, " . $_SESSION['username_owner'] ."!". ""; ?>
+                </a>
+            </h5>
         </nav>
     </div>
     <div class="container mt-5">
@@ -87,7 +105,7 @@ $hasil = $stmt->fetch_assoc();
             <div class="col">
                 <div class="card h-100 border-0 rounded-3">
                     <div class="card-body">
-                        <img src="img/pumpkin_PNG9365.png" class="img-thumbnail">
+                        <img src="<?=$img;?>" class="img-thumbnail">
                         <h4 class="card-title my-2"><?=$a["nama_produk"]?></h4>
                         <div>
                             <a href="detailProduk.php?id=<?=$a["id_produk"]?>" class="btn btn-warning" style="background-color: rgba(255, 117, 24, 1); color: white;" >Detail Produk</a>
