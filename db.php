@@ -1,5 +1,5 @@
 <?php
-$conn = new mysqli("localhost","root","","seed_up");
+$conn = new mysqli("localhost","root","","seed_up2");
 
 if ($conn->connect_error) {
     die("Koneksi Gagal");
