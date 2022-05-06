@@ -1,7 +1,7 @@
 <?php 
 
 require_once("./db.php");
-
+session_start();
 $result = query("SELECT * FROM data_produk");
 if (isset($_GET["id"])) {
     $id = $_GET["id"];
@@ -40,6 +40,10 @@ $hasil = $stmt->fetch_assoc();
             margin: 0;
             padding: 0;
         }
+        body {
+            background-image: url(img/bgppl.jpeg);
+            background-size: cover;
+        }
         nav {
             padding-top: 20px;
             padding-bottom: 5px;
@@ -61,14 +65,22 @@ $hasil = $stmt->fetch_assoc();
 <body>
     <div class="container mt-4">
         <nav class="row ps-4">
-            <h3 class="col-2">SEEDS_UP</h3>
-            <ul class="col-5 d-flex justify-content-between">
+            <div class="col-1">
+                <img src="img/logoppl-removebg-preview.png" style="position:absolute;top:4%;height: 4rem; width: 4.5rem;">
+            </div>
+            <ul class="col-7 d-flex justify-content-between">
                 <li><a href="tampilanOwner2.php"><h6>Dashboard</h6></a></li>
-                <li><a href="laporanPencatatan2.php"><h6>Laporan Pencatatan</h6></a></li>
                 <li><a href="infoCuaca2.php"><h6>Info Cuaca</h6></a></li>
-                <li><a href="pemasaran2.php"><h6>Pemasaran</h6></a></li>
+                <li><a href="laporanPencatatan2.php"><h6>Laporan Pencatatan</h6></a></li>
+                <li><a href="pemasaran2.php"><h6>Produk</h6></a></li>
+                <li><a href="riwayatTransaksi.php"><h6> Riwayat Transaksi</h6></a></li>
             </ul>
-            <h5 class="col-3 offset-2 pt-2 d-flex justify-content-end">Halo, <?=$hasil["username"]?></h5>
+            <h5 class="col-2 offset-2 pt-2 d-flex justify-content-end">
+                <a href="profilOwner.php" style="text-decoration: none;color: #34364a;">
+                <i class="bi bi-person"></i>
+                <?php echo "Halo, " . $_SESSION['username_owner'] ."!". ""; ?>
+                </a>
+            </h5>
         </nav>
     </div>
     <div class="container mt-5">
