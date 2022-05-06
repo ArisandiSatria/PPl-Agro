@@ -1,14 +1,23 @@
 <?php 
 
 require_once("./db.php");
+session_start();
+if (isset($_GET["id"])) {
+    $id = $_GET["id"];
+    $query = "SELECT * FROM data_pencatatan WHERE id = '$id'";
+    $stmt = $conn->query($query);
+    $result = $stmt->fetch_assoc();
+}
 
 if (isset($_POST["submit"])) {
     $id = $_GET["id"];
     $judulCatatan = $_POST["judulCatatan"];
     $kategoriCatatan = $_POST["kategoriCatatan"];
     $isiCatatan = $_POST["isiCatatan"];
+    $pemasukan = $_POST["pemasukan"];
+    $pengeluaran = $_POST["pengeluaran"];
 
-    $sql = "UPDATE data_pencatatan SET judul='$judulCatatan', kategori='$kategoriCatatan', isi='$isiCatatan' WHERE id=$id";
+    $sql = "UPDATE data_pencatatan SET judul='$judulCatatan', kategori='$kategoriCatatan', isi='$isiCatatan', pemasukan='$pemasukan', pengeluaran='$pengeluaran' WHERE id=$id";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     header("Location: laporanPencatatan2.php");
@@ -36,6 +45,10 @@ $hasil = $stmt->fetch_assoc();
             margin: 0;
             padding: 0;
         }
+        body {
+            background-image: url(img/bgppl.jpeg);
+            background-size: cover;
+        }
         nav {
             padding-top: 20px;
             padding-bottom: 5px;
@@ -56,15 +69,23 @@ $hasil = $stmt->fetch_assoc();
     </style>
 <body>
     <div class="container mt-4">
-        <nav class="row ps-4">
-            <h3 class="col-2">SEEDS_UP</h3>
-            <ul class="col-5 d-flex justify-content-between">
+    <nav class="row ps-4">
+            <div class="col-1">
+                <img src="img/logoppl-removebg-preview.png" style="position:absolute;top:4%;height: 4rem; width: 4.5rem;">
+            </div>
+            <ul class="col-7 d-flex justify-content-between">
                 <li><a href="tampilanOwner2.php"><h6>Dashboard</h6></a></li>
-                <li><a href="laporanPencatatan2.php"><h6>Laporan Pencatatan</h6></a></li>
                 <li><a href="infoCuaca2.php"><h6>Info Cuaca</h6></a></li>
-                <li><a href="pemasaran2.php"><h6>Pemasaran</h6></a></li>
+                <li><a href="laporanPencatatan2.php"><h6>Laporan Pencatatan</h6></a></li>
+                <li><a href="pemasaran2.php"><h6>Produk</h6></a></li>
+                <li><a href="riwayatTransaksi.php"><h6> Riwayat Transaksi</h6></a></li>
             </ul>
-            <h5 class="col-3 offset-2 pt-2 d-flex justify-content-end">Halo, <?=$hasil["username"]?></h5>
+            <h5 class="col-2 offset-2 pt-2 d-flex justify-content-end">
+                <a href="profilOwner.php" style="text-decoration: none;color: #34364a;">
+                <i class="bi bi-person"></i>
+                <?php echo "Halo, " . $_SESSION['username_owner'] ."!". ""; ?>
+                </a>
+            </h5>
         </nav>
     </div>
     <div class="container mx-auto mt-5 row">
@@ -72,17 +93,27 @@ $hasil = $stmt->fetch_assoc();
             <h5 style="color: rgba(255, 117, 24, 1);">Hati-hati dalam mengubah catatanmu, ok?</h5>
             <h2 class="mb-4" style="font-weight: bold;">Ubah Catatan</h2>
             <form action="" method="POST">
-                <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Judul</label>
-                    <input name="judulCatatan" class="form-control" id="exampleFormControlInput1" placeholder="Masukkan Judul" required>
+            <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Judul</label><p class="d-inline" style="color: red;">*</p>
+                    <input name="judulCatatan" class="form-control" id="exampleFormControlInput1" value="<?=$result["judul"]?>" placeholder="Masukkan Judul" required>
                 </div>
                 <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Kategori</label>
-                    <input name="kategoriCatatan" class="form-control" id="exampleFormControlInput1" placeholder="Masukkan kategori" required>
+                    <label for="exampleFormControlInput1" class="form-label">Kategori</label><p class="d-inline" style="color: red;">*</p>
+                    <input name="kategoriCatatan" class="form-control" id="exampleFormControlInput1" value="<?=$result["kategori"]?>" placeholder="Masukkan Kategori">
+                </div>
+                <div class="row">
+                    <div class="mb-3 col">
+                        <label for="exampleFormControlInput1" class="form-label">Pemasukan</label>
+                        <input type="number" name="pemasukan" class="form-control" id="exampleFormControlInput1" value="<?=$result["pemasukan"]?>" placeholder="Masukkan pemasukan Anda">
+                    </div>
+                    <div class="mb-3 col">
+                        <label for="exampleFormControlInput1" class="form-label">Pengeluaran</label>
+                        <input type="number" name="pengeluaran" class="form-control" id="exampleFormControlInput1" value="<?=$result["pengeluaran"]?>" placeholder="Masukkan pengeluaran Anda">
+                    </div>
                 </div>
                 <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Isi</label>
-                    <textarea name="isiCatatan" class="form-control" id="exampleFormControlTextarea1" rows="3" required></textarea>
+                    <label for="exampleFormControlTextarea1" class="form-label">Deskripsi</label>
+                    <textarea name="isiCatatan" class="form-control" id="exampleFormControlTextarea1"></textarea>
                 </div>
                 <div class="mb-3">
                     <a href="laporanPencatatan2.php" class="btn btn-secondary">Batal</a>
