@@ -20,7 +20,7 @@ fetch('https://api.openweathermap.org/data/2.5/forecast?q='+newName.value+'&appi
     //------------------------------------------------------------
 
     //Getting Weather Icons
-     for(i = 0; i<5; i++){
+    for(i = 0; i<5; i++){
         document.getElementById("img" + (i+1)).src = "http://openweathermap.org/img/wn/"+
         data.list[i].weather[0].icon
         +".png";
@@ -31,7 +31,7 @@ fetch('https://api.openweathermap.org/data/2.5/forecast?q='+newName.value+'&appi
 
 })
 
-.catch(err => alert("Something Went Wrong: Try Checking Your Internet Coneciton"))
+.catch(err => alert("Something Went Wrong: Try Checking Your Internet Connection"))
 }
 
 function DefaultScreen(){
