@@ -1,19 +1,17 @@
 <?php 
-
+session_start();
 require_once("./db.php");
 
 if (isset($_POST["submit"])) {
     $namaProduk = $_POST["namaProduk"];
     $keteranganProduk = $_POST["keteranganProduk"];
-    $fotoProduk = $_POST["fotoProduk"];
+    // $fotoProduk = base64_encode(file_get_contents($_FILES["fotoProduk"]["name"]));
     $hargaProduk = $_POST["hargaProduk"];
     $stokProduk = $_POST["stokProduk"];
-    $sql = "INSERT INTO data_produk (nama_produk, keterangan, foto, harga_produk, stok_barang) 
-                        VALUES (?,?,?,?)
+    $sql = "INSERT INTO data_produk (nama_produk, keterangan, harga_produk, stok_barang) 
+                        VALUES ('$namaProduk', '$keteranganProduk', $hargaProduk, $stokProduk)
             ";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssii", $namaProduk, $keteranganProduk, $fotoProduk, $hargaProduk, $stokProduk);
-    $stmt->execute();
+    mysqli_query($conn, $sql);
     header("Location: pemasaran2.php");
 }
 
@@ -38,6 +36,10 @@ $hasil = $stmt->fetch_assoc();
             margin: 0;
             padding: 0;
         }
+        body {
+            background-image: url(img/bgppl.jpeg);
+            background-size: cover;
+        }
         nav {
             padding-top: 20px;
             padding-bottom: 5px;
@@ -58,26 +60,34 @@ $hasil = $stmt->fetch_assoc();
     </style>
 <body>
     <div class="container mt-4">
-        <nav class="row ps-4">
-            <h3 class="col-2">SEEDS_UP</h3>
-            <ul class="col-5 d-flex justify-content-between">
+    <nav class="row ps-4">
+            <div class="col-1">
+                <img src="img/logoppl-removebg-preview.png" style="position:absolute;top:4%;height: 4rem; width: 4.5rem;">
+            </div>
+            <ul class="col-7 d-flex justify-content-between">
                 <li><a href="tampilanOwner2.php"><h6>Dashboard</h6></a></li>
-                <li><a href="laporanPencatatan2.php"><h6>Laporan Pencatatan</h6></a></li>
                 <li><a href="infoCuaca2.php"><h6>Info Cuaca</h6></a></li>
-                <li><a href="pemasaran2.php"><h6>Pemasaran</h6></a></li>
+                <li><a href="laporanPencatatan2.php"><h6>Laporan Pencatatan</h6></a></li>
+                <li><a href="pemasaran2.php"><h6>Produk</h6></a></li>
+                <li><a href="riwayatTransaksi.php"><h6> Riwayat Transaksi</h6></a></li>
             </ul>
-            <h5 class="col-3 offset-2 pt-2 d-flex justify-content-end">Halo, <?=$hasil["username"]?></h5>
+            <h5 class="col-2 offset-2 pt-2 d-flex justify-content-end">
+                <a href="profilOwner.php" style="text-decoration: none;color: #34364a;">
+                <i class="bi bi-person"></i>
+                <?php echo "Halo, " . $_SESSION['username_owner'] ."!". ""; ?>
+                </a>
+            </h5>
         </nav>
     </div>
     <div class="container mx-auto mt-5 row">
         <div class="col">
             <h5 style="color: rgba(255, 117, 24, 1);">Tambahkan produk luar biasamu!</h5>
             <h2 class="mb-4" style="font-weight: bold;">Tambah Produk</h2>
-            <form action="" method="POST">
-                <div class="mb-3">
+            <form action="" method="POST" enctype="multipart/form-data">
+                <!-- <div class="mb-3">
                     <label for="exampleFormControlInput1" class="form-label">Foto Produk</label>
                     <input type="file" name="fotoProduk" class="form-control" id="inputGroupFile01" required>
-                </div>
+                </div> -->
                 <div class="mb-3">
                     <label for="exampleFormControlInput1" class="form-label">Nama Produk</label>
                     <input name="namaProduk" class="form-control" id="exampleFormControlInput1" required>
